@@ -2,6 +2,12 @@
 package lk.medichannel.doctor.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -12,23 +18,32 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "User ID is required")
+    @Positive(message = "User ID must be positive")
     @Column(name = "user_id", nullable = false, unique = true)
     private Long userId;
 
+    @NotNull(message = "Specialisation ID is required")
+    @Positive(message = "Specialisation ID must be positive")
     @Column(name = "specialisation_id", nullable = false)
     private Long specialisationId;
 
-    @Column(name = "qualification")
+    @Size(max = 200, message = "Qualification cannot exceed 200 characters")
+    @Column(name = "qualification", length = 200)
     private String qualification;
 
-    @Column(name = "experience_years", nullable = false)
+    @NotNull(message = "Experience years is required")
+    @Min(value = 0, message = "Experience years cannot be negative")
+    @Column(name = "experience_years")
     private Integer experienceYears;
 
+    @NotNull(message = "Consultation fee is required")
+    @DecimalMin(value = "0.00", message = "Consultation fee cannot be negative")
     @Column(name = "consultation_fee", nullable = false)
     private BigDecimal consultationFee;
 
     @Column(name = "is_active", nullable = false)
-    private boolean active;
+    private boolean active = true;
 
     public Doctor() {
     }
